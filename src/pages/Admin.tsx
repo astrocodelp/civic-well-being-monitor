@@ -499,107 +499,148 @@ const Admin = () => {
 
           {/* Area Citizens Dialog */}
           <Dialog open={!!selectedArea} onOpenChange={() => setSelectedArea(null)}>
-            <DialogContent className="max-w-[95vw] md:max-w-3xl max-h-[85vh] md:max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle className="text-base md:text-lg">Πολίτες σε Κίνδυνο - {selectedArea}</DialogTitle>
-                <DialogDescription className="text-xs md:text-sm">Κάντε κλικ σε έναν πολίτη για να στείλετε εξατομικευμένη βοήθεια</DialogDescription>
+            <DialogContent className="max-w-[95vw] md:max-w-3xl h-[90vh] md:h-auto md:max-h-[80vh] flex flex-col p-0">
+              <DialogHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-2 md:pb-4 border-b sticky top-0 bg-background z-10">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="md:hidden h-8 w-8 shrink-0"
+                    onClick={() => setSelectedArea(null)}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                  </Button>
+                  <div className="flex-1 min-w-0">
+                    <DialogTitle className="text-sm md:text-lg truncate">Πολίτες - {selectedArea}</DialogTitle>
+                    <DialogDescription className="text-xs md:text-sm">Κάντε κλικ για βοήθεια</DialogDescription>
+                  </div>
+                </div>
               </DialogHeader>
 
-              <div className="space-y-2 md:space-y-4 mt-4">
+              <div className="flex-1 overflow-y-auto px-4 md:px-6 py-3 md:py-4 space-y-2 md:space-y-3">
                 {selectedArea &&
                   getAreaCitizens(selectedArea).map((citizen) => (
                     <Card
                       key={citizen.id}
-                      className="cursor-pointer transition-all hover:bg-accent"
+                      className="cursor-pointer transition-all hover:bg-accent border-l-4"
+                      style={{ borderLeftColor: citizen.risk === "Υψηλός" ? "hsl(0 84% 60%)" : citizen.risk === "Μέτριος" ? "hsl(38 92% 50%)" : "hsl(142 71% 45%)" }}
                       onClick={() => setSelectedCitizen(citizen)}
                     >
-                      <CardContent className="p-3 md:p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2 md:gap-3 flex-wrap">
-                              <span className="font-mono font-semibold text-xs md:text-sm">{citizen.id}</span>
-                              <Badge variant={getRiskBadgeVariant(citizen.risk)} className="text-xs">{citizen.risk}</Badge>
+                      <CardContent className="p-2.5 md:p-4">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex-1 min-w-0 space-y-0.5 md:space-y-1">
+                            <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+                              <span className="font-mono font-semibold text-xs md:text-sm truncate">{citizen.id}</span>
+                              <Badge variant={getRiskBadgeVariant(citizen.risk)} className="text-[10px] md:text-xs px-1.5 md:px-2 py-0 md:py-0.5 shrink-0">{citizen.risk}</Badge>
                             </div>
-                            <div className="text-xs md:text-sm text-muted-foreground">
-                              Ηλικία: {citizen.age} | Αιτία: {citizen.cause}
+                            <div className="text-[11px] md:text-sm text-muted-foreground">
+                              <span className="inline-block">Ηλικία: {citizen.age}</span>
+                              <span className="mx-1">•</span>
+                              <span className="inline-block">{citizen.cause}</span>
                             </div>
                           </div>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-muted-foreground">
+                            <path d="m9 18 6-6-6-6"/>
+                          </svg>
                         </div>
                       </CardContent>
                     </Card>
                   ))}
+              </div>
+              
+              <div className="px-4 md:px-6 py-3 md:py-4 border-t bg-muted/30 md:hidden">
+                <p className="text-xs text-muted-foreground text-center">
+                  {selectedArea && getAreaCitizens(selectedArea).length} πολίτες σε αυτή την περιοχή
+                </p>
               </div>
             </DialogContent>
           </Dialog>
 
           {/* Individual Citizen Dialog */}
           <Dialog open={!!selectedCitizen} onOpenChange={() => setSelectedCitizen(null)}>
-            <DialogContent className="max-w-[95vw] md:max-w-lg">
-              <DialogHeader>
-                <DialogTitle className="text-base md:text-lg">Αποστολή Εξατομικευμένης Βοήθειας</DialogTitle>
-                <DialogDescription className="text-xs md:text-sm">
-                  Πολίτης: {selectedCitizen?.id} | Περιοχή: {selectedCitizen?.area}
-                </DialogDescription>
+            <DialogContent className="max-w-[95vw] md:max-w-lg h-auto max-h-[90vh] flex flex-col p-0">
+              <DialogHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-2 md:pb-4 border-b sticky top-0 bg-background z-10">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="md:hidden h-8 w-8 shrink-0"
+                    onClick={() => setSelectedCitizen(null)}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                  </Button>
+                  <div className="flex-1 min-w-0">
+                    <DialogTitle className="text-sm md:text-lg">Αποστολή Βοήθειας</DialogTitle>
+                    <DialogDescription className="text-xs md:text-sm truncate">
+                      {selectedCitizen?.id} • {selectedCitizen?.area}
+                    </DialogDescription>
+                  </div>
+                </div>
               </DialogHeader>
 
-              <div className="space-y-4 mt-4">
-                <div className="p-4 bg-muted rounded-lg space-y-2">
+              <div className="flex-1 overflow-y-auto px-4 md:px-6 py-3 md:py-4 space-y-3 md:space-y-4">
+                <div className="p-3 md:p-4 bg-muted rounded-lg space-y-1.5 md:space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Επίπεδο Κινδύνου:</span>
-                    <Badge variant={selectedCitizen ? getRiskBadgeVariant(selectedCitizen.risk) : "default"}>
+                    <span className="text-xs md:text-sm text-muted-foreground">Κίνδυνος:</span>
+                    <Badge variant={selectedCitizen ? getRiskBadgeVariant(selectedCitizen.risk) : "default"} className="text-xs">
                       {selectedCitizen?.risk}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Ηλικία:</span>
-                    <span className="font-medium">{selectedCitizen?.age}</span>
+                    <span className="text-xs md:text-sm text-muted-foreground">Ηλικία:</span>
+                    <span className="text-xs md:text-sm font-medium">{selectedCitizen?.age}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Κύρια Αιτία:</span>
-                    <span className="font-medium">{selectedCitizen?.cause}</span>
+                    <span className="text-xs md:text-sm text-muted-foreground">Αιτία:</span>
+                    <span className="text-xs md:text-sm font-medium">{selectedCitizen?.cause}</span>
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="assistance">Τύπος Βοήθειας</Label>
+                  <Label htmlFor="assistance" className="text-xs md:text-sm">Τύπος Βοήθειας</Label>
                   <Select value={assistanceType} onValueChange={setAssistanceType}>
-                    <SelectTrigger id="assistance">
+                    <SelectTrigger id="assistance" className="text-xs md:text-sm h-9 md:h-10">
                       <SelectValue placeholder="Επιλέξτε τύπο βοήθειας" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Οικονομική Βοήθεια">Οικονομική Βοήθεια</SelectItem>
-                      <SelectItem value="Επίδομα Στέγασης">Επίδομα Στέγασης</SelectItem>
-                      <SelectItem value="Επίδομα Ανεργίας">Επίδομα Ανεργίας</SelectItem>
-                      <SelectItem value="Κοινωνικό Παντοπωλείο">Κοινωνικό Παντοπωλείο</SelectItem>
-                      <SelectItem value="Ιατρική Φροντίδα">Ιατρική Φροντίδα</SelectItem>
-                      <SelectItem value="Συμβουλευτική">Συμβουλευτική</SelectItem>
+                      <SelectItem value="Οικονομική Βοήθεια" className="text-xs md:text-sm">Οικονομική Βοήθεια</SelectItem>
+                      <SelectItem value="Επίδομα Στέγασης" className="text-xs md:text-sm">Επίδομα Στέγασης</SelectItem>
+                      <SelectItem value="Επίδομα Ανεργίας" className="text-xs md:text-sm">Επίδομα Ανεργίας</SelectItem>
+                      <SelectItem value="Κοινωνικό Παντοπωλείο" className="text-xs md:text-sm">Κοινωνικό Παντοπωλείο</SelectItem>
+                      <SelectItem value="Ιατρική Φροντίδα" className="text-xs md:text-sm">Ιατρική Φροντίδα</SelectItem>
+                      <SelectItem value="Συμβουλευτική" className="text-xs md:text-sm">Συμβουλευτική</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label htmlFor="method">Μέθοδος Αποστολής</Label>
+                  <Label htmlFor="method" className="text-xs md:text-sm">Μέθοδος Αποστολής</Label>
                   <Select value={sendMethod} onValueChange={setSendMethod}>
-                    <SelectTrigger id="method">
+                    <SelectTrigger id="method" className="text-xs md:text-sm h-9 md:h-10">
                       <SelectValue placeholder="Επιλέξτε μέθοδο" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="sms">SMS</SelectItem>
-                      <SelectItem value="push">Push Notification</SelectItem>
-                      <SelectItem value="letter">Γράμμα στη Διεύθυνση (Κρυπτογραφημένη)</SelectItem>
+                      <SelectItem value="sms" className="text-xs md:text-sm">SMS</SelectItem>
+                      <SelectItem value="push" className="text-xs md:text-sm">Push Notification</SelectItem>
+                      <SelectItem value="letter" className="text-xs md:text-sm">Γράμμα (Κρυπτογραφημένο)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <Button className="w-full" onClick={handleSendAssistance} disabled={!assistanceType || !sendMethod}>
-                  <Send className="w-4 h-4 mr-2" />
+                <Button className="w-full text-xs md:text-sm h-9 md:h-10" onClick={handleSendAssistance} disabled={!assistanceType || !sendMethod}>
+                  <Send className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2" />
                   Αποστολή Ειδοποίησης
                 </Button>
 
-                <p className="text-xs text-muted-foreground text-center">
-                  Η διεύθυνση του πολίτη είναι κρυπτογραφημένη και δεν είναι ορατή στους διαχειριστές
+                <p className="text-[10px] md:text-xs text-muted-foreground text-center leading-tight">
+                  Η διεύθυνση είναι κρυπτογραφημένη
                 </p>
               </div>
+              
             </DialogContent>
           </Dialog>
         </div>
