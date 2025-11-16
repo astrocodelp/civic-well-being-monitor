@@ -1,10 +1,5 @@
-import { useState } from "react";
-import { Building2, MapPin, Send } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
 
 const mockNotifications = [
   {
@@ -26,28 +21,6 @@ const mockNotifications = [
 ];
 
 const CitizenApp = () => {
-  const [address, setAddress] = useState("");
-  const { toast } = useToast();
-
-  const handleSubmitAddress = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!address.trim()) {
-      toast({
-        title: "Σφάλμα",
-        description: "Παρακαλώ εισάγετε τη διεύθυνσή σας",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    // Save to localStorage
-    localStorage.setItem("citizenAddress", address);
-    
-    toast({
-      title: "Επιτυχής αποθήκευση",
-      description: "Η διεύθυνσή σας αποθηκεύτηκε επιτυχώς",
-    });
-  };
 
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-8">
@@ -116,42 +89,6 @@ const CitizenApp = () => {
                 </CardContent>
               </Card>
             ))}
-
-            {/* Address Registration Card */}
-            <Card className="backdrop-blur-xl bg-card/95 shadow-lg border-border/50 mt-8">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-primary-foreground" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Καταχώριση Διεύθυνσης</h3>
-                    <p className="text-xs text-muted-foreground">Για λήψη επιστολών και ειδοποιήσεων</p>
-                  </div>
-                </div>
-
-                <form onSubmit={handleSubmitAddress} className="space-y-4">
-                  <div>
-                    <Label htmlFor="address" className="text-sm">Διεύθυνση Κατοικίας</Label>
-                    <Input
-                      id="address"
-                      placeholder="π.χ. Σταδίου 10, Αθήνα"
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      className="mt-1.5"
-                    />
-                  </div>
-                  <Button type="submit" className="w-full">
-                    <Send className="w-4 h-4 mr-2" />
-                    Αποθήκευση Διεύθυνσης
-                  </Button>
-                </form>
-
-                <p className="text-xs text-muted-foreground mt-4 text-center">
-                  Τα στοιχεία σας είναι ασφαλή και ανωνυμοποιημένα σύμφωνα με το GDPR
-                </p>
-              </CardContent>
-            </Card>
           </div>
 
           {/* Bottom padding */}
