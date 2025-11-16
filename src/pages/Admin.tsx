@@ -528,7 +528,7 @@ const Admin = () => {
                 </div>
               </DialogHeader>
 
-              <div className="flex-1 overflow-y-auto px-4 md:px-6 py-3 md:py-4 space-y-2 md:space-y-3">
+              <div className="flex-1 overflow-y-auto px-3 md:px-6 py-2 md:py-4 space-y-2 md:space-y-3">
                 {selectedArea &&
                   (() => {
                     const all = getAreaCitizens(selectedArea);
@@ -538,18 +538,18 @@ const Admin = () => {
                     return list.map((citizen) => (
                       <Card
                         key={citizen.id}
-                        className="cursor-pointer transition-all hover:bg-accent border-l-4"
+                        className="cursor-pointer transition-all hover:bg-accent md:border-l-4"
                         style={{ borderLeftColor: citizen.risk === "Υψηλός" ? "hsl(0 84% 60%)" : citizen.risk === "Μέτριος" ? "hsl(38 92% 50%)" : "hsl(142 71% 45%)" }}
                         onClick={() => setSelectedCitizen(citizen)}
                       >
-                        <CardContent className="p-2.5 md:p-4">
-                          <div className="flex items-center justify-between gap-2">
-                            <div className="flex-1 min-w-0 space-y-0.5 md:space-y-1">
-                              <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+                        <CardContent className="p-3 md:p-4">
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <div className="flex items-center gap-2 flex-wrap">
                                 <span className="font-mono font-semibold text-xs md:text-sm truncate">{citizen.id}</span>
-                                <Badge variant={getRiskBadgeVariant(citizen.risk)} className="text-[10px] md:text-xs px-1.5 md:px-2 py-0 md:py-0.5 shrink-0">{citizen.risk}</Badge>
+                                <Badge variant={getRiskBadgeVariant(citizen.risk)} className="text-[9px] md:text-xs px-1.5 py-0.5 shrink-0">{citizen.risk}</Badge>
                               </div>
-                              <div className="text-[11px] md:text-sm text-muted-foreground">
+                              <div className="text-[10px] md:text-sm text-muted-foreground">
                                 <span className="inline-block">Ηλικία: {citizen.age}</span>
                                 <span className="mx-1">•</span>
                                 <span className="inline-block">{citizen.cause}</span>
@@ -566,18 +566,18 @@ const Admin = () => {
                 }
               </div>
               
-              <div className="px-4 md:px-6 py-3 md:py-4 border-t bg-muted/30 md:hidden">
+              <div className="px-3 md:px-6 py-2.5 md:py-4 border-t bg-muted/30 md:hidden">
                 {selectedArea && (() => {
                   const total = Math.max(1, Math.ceil(getAreaCitizens(selectedArea).length / ITEMS_PER_PAGE_MOBILE));
                   return (
-                    <div className="flex items-center justify-between">
-                      <Button variant="secondary" size="sm" onClick={() => setAreaPage((p) => Math.max(1, p - 1))} disabled={areaPage <= 1}>
+                    <div className="flex items-center justify-between gap-3">
+                      <Button variant="secondary" size="sm" onClick={() => setAreaPage((p) => Math.max(1, p - 1))} disabled={areaPage <= 1} className="text-xs">
                         Πίσω
                       </Button>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-[10px] text-muted-foreground whitespace-nowrap">
                         Σελίδα {areaPage} από {total}
                       </p>
-                      <Button variant="default" size="sm" onClick={() => setAreaPage((p) => Math.min(total, p + 1))} disabled={areaPage >= total}>
+                      <Button variant="default" size="sm" onClick={() => setAreaPage((p) => Math.min(total, p + 1))} disabled={areaPage >= total} className="text-xs">
                         Επόμενη
                       </Button>
                     </div>
