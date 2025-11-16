@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Users, AlertTriangle, TrendingUp, CheckCircle, Bell, Download, Search, Filter, Send } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   LineChart,
   Line,
@@ -121,6 +122,14 @@ const Admin = () => {
   const [assistanceType, setAssistanceType] = useState("");
   const [sendMethod, setSendMethod] = useState("");
   const { toast } = useToast();
+
+  const isMobile = useIsMobile();
+  const [areaPage, setAreaPage] = useState(1);
+  const ITEMS_PER_PAGE_MOBILE = 4;
+
+  useEffect(() => {
+    setAreaPage(1);
+  }, [selectedArea, isMobile]);
 
   const getRiskBadgeVariant = (risk: string) => {
     if (risk === "Υψηλός") return "destructive";
@@ -521,39 +530,59 @@ const Admin = () => {
 
               <div className="flex-1 overflow-y-auto px-4 md:px-6 py-3 md:py-4 space-y-2 md:space-y-3">
                 {selectedArea &&
-                  getAreaCitizens(selectedArea).map((citizen) => (
-                    <Card
-                      key={citizen.id}
-                      className="cursor-pointer transition-all hover:bg-accent border-l-4"
-                      style={{ borderLeftColor: citizen.risk === "Υψηλός" ? "hsl(0 84% 60%)" : citizen.risk === "Μέτριος" ? "hsl(38 92% 50%)" : "hsl(142 71% 45%)" }}
-                      onClick={() => setSelectedCitizen(citizen)}
-                    >
-                      <CardContent className="p-2.5 md:p-4">
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="flex-1 min-w-0 space-y-0.5 md:space-y-1">
-                            <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
-                              <span className="font-mono font-semibold text-xs md:text-sm truncate">{citizen.id}</span>
-                              <Badge variant={getRiskBadgeVariant(citizen.risk)} className="text-[10px] md:text-xs px-1.5 md:px-2 py-0 md:py-0.5 shrink-0">{citizen.risk}</Badge>
+                  (() => {
+                    const all = getAreaCitizens(selectedArea);
+                    const start = (areaPage - 1) * ITEMS_PER_PAGE_MOBILE;
+                    const end = isMobile ? start + ITEMS_PER_PAGE_MOBILE : all.length;
+                    const list = isMobile ? all.slice(start, end) : all;
+                    return list.map((citizen) => (
+                      <Card
+                        key={citizen.id}
+                        className="cursor-pointer transition-all hover:bg-accent border-l-4"
+                        style={{ borderLeftColor: citizen.risk === "Υψηλός" ? "hsl(0 84% 60%)" : citizen.risk === "Μέτριος" ? "hsl(38 92% 50%)" : "hsl(142 71% 45%)" }}
+                        onClick={() => setSelectedCitizen(citizen)}
+                      >
+                        <CardContent className="p-2.5 md:p-4">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex-1 min-w-0 space-y-0.5 md:space-y-1">
+                              <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+                                <span className="font-mono font-semibold text-xs md:text-sm truncate">{citizen.id}</span>
+                                <Badge variant={getRiskBadgeVariant(citizen.risk)} className="text-[10px] md:text-xs px-1.5 md:px-2 py-0 md:py-0.5 shrink-0">{citizen.risk}</Badge>
+                              </div>
+                              <div className="text-[11px] md:text-sm text-muted-foreground">
+                                <span className="inline-block">Ηλικία: {citizen.age}</span>
+                                <span className="mx-1">•</span>
+                                <span className="inline-block">{citizen.cause}</span>
+                              </div>
                             </div>
-                            <div className="text-[11px] md:text-sm text-muted-foreground">
-                              <span className="inline-block">Ηλικία: {citizen.age}</span>
-                              <span className="mx-1">•</span>
-                              <span className="inline-block">{citizen.cause}</span>
-                            </div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-muted-foreground">
+                              <path d="m9 18 6-6-6-6"/>
+                            </svg>
                           </div>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-muted-foreground">
-                            <path d="m9 18 6-6-6-6"/>
-                          </svg>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ));
+                  })()
+                }
               </div>
               
               <div className="px-4 md:px-6 py-3 md:py-4 border-t bg-muted/30 md:hidden">
-                <p className="text-xs text-muted-foreground text-center">
-                  {selectedArea && getAreaCitizens(selectedArea).length} πολίτες σε αυτή την περιοχή
-                </p>
+                {selectedArea && (() => {
+                  const total = Math.max(1, Math.ceil(getAreaCitizens(selectedArea).length / ITEMS_PER_PAGE_MOBILE));
+                  return (
+                    <div className="flex items-center justify-between">
+                      <Button variant="secondary" size="sm" onClick={() => setAreaPage((p) => Math.max(1, p - 1))} disabled={areaPage <= 1}>
+                        Πίσω
+                      </Button>
+                      <p className="text-xs text-muted-foreground">
+                        Σελίδα {areaPage} από {total}
+                      </p>
+                      <Button variant="default" size="sm" onClick={() => setAreaPage((p) => Math.min(total, p + 1))} disabled={areaPage >= total}>
+                        Επόμενη
+                      </Button>
+                    </div>
+                  );
+                })()}
               </div>
             </DialogContent>
           </Dialog>
