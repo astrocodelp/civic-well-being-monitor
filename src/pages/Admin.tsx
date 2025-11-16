@@ -73,13 +73,20 @@ const generateCitizens = () => {
     { name: "Γκάζι", count: 22 },
     { name: "Πετράλωνα", count: 15 },
   ];
-  
+
   const causes = ["Στέγαση", "Στέγαση", "Στέγαση", "Απώλεια Εργασίας", "Υγεία/Αναπηρία", "Οικογενειακά Θέματα", "Άλλο"];
-  const supports = ["Στέγαση", "Οικονομική Βοήθεια", "Συμβουλευτική", "Ιατρική Φροντίδα", "Επαγγελματική Κατάρτιση", "Κοινωνικό Παντοπωλείο"];
-  
+  const supports = [
+    "Στέγαση",
+    "Οικονομική Βοήθεια",
+    "Συμβουλευτική",
+    "Ιατρική Φροντίδα",
+    "Επαγγελματική Κατάρτιση",
+    "Κοινωνικό Παντοπωλείο",
+  ];
+
   const citizens = [];
   let idCounter = 1;
-  
+
   for (const area of areas) {
     // Υπολογισμός risk level βάσει αριθμού ατόμων
     let areaRisk = "Χαμηλός";
@@ -88,10 +95,10 @@ const generateCitizens = () => {
     } else if (area.count >= 10) {
       areaRisk = "Μέτριος";
     }
-    
+
     for (let i = 0; i < area.count; i++) {
       citizens.push({
-        id: `C-2024-${String(idCounter).padStart(4, '0')}`,
+        id: `C-2024-${String(idCounter).padStart(4, "0")}`,
         area: area.name,
         age: Math.floor(Math.random() * 50) + 20,
         risk: areaRisk,
@@ -101,7 +108,7 @@ const generateCitizens = () => {
       idCounter++;
     }
   }
-  
+
   return citizens;
 };
 
@@ -221,7 +228,9 @@ const Admin = () => {
                       <Users className="w-5 h-5 md:w-6 md:h-6 text-primary-foreground" />
                     </div>
                     <div>
-                      <h1 className="text-lg md:text-2xl font-bold text-foreground">Σύστημα Παρακολούθησης Ευάλωτων Πολιτών</h1>
+                      <h1 className="text-lg md:text-2xl font-bold text-foreground">
+                        Σύστημα Παρακολούθησης Ευάλωτων Πολιτών
+                      </h1>
                       <p className="text-xs md:text-sm text-muted-foreground">Δήμος Αθηναίων</p>
                     </div>
                   </div>
@@ -234,84 +243,6 @@ const Admin = () => {
                     </Button>
                   </div>
                 </div>
-
-                {/* Λίστα Περιοχών σε Κίνδυνο (πάνω-πάνω) */}
-                <Card>
-                  <CardHeader>
-                    <div className="flex items-center justify-between flex-wrap gap-3">
-                      <div>
-                        <CardTitle className="text-base md:text-lg">Λίστα Περιοχών σε Κίνδυνο</CardTitle>
-                        <CardDescription className="text-xs md:text-sm">8 από 8 περιοχές</CardDescription>
-                      </div>
-                      <Button variant="default" size="sm" className="text-xs md:text-sm">
-                        <Download className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
-                        <span className="hidden sm:inline">Εξαγωγή</span>
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col sm:flex-row gap-2 md:gap-4 mb-4 md:mb-6">
-                      <div className="flex-1 relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 md:w-4 md:h-4 text-muted-foreground" />
-                        <Input
-                          placeholder="Αναζήτηση με περιοχή..."
-                          className="pl-8 md:pl-10 text-sm"
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                      </div>
-                      <Select value={filter} onValueChange={setFilter}>
-                        <SelectTrigger className="w-full sm:w-[180px] text-sm">
-                          <Filter className="w-3 h-3 md:w-4 md:h-4 mr-2" />
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Όλοι">Όλοι</SelectItem>
-                          <SelectItem value="Υψηλός">Υψηλός</SelectItem>
-                          <SelectItem value="Μέτριος">Μέτριος</SelectItem>
-                          <SelectItem value="Χαμηλός">Χαμηλός</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="overflow-x-auto -mx-4 md:mx-0">
-                      <table className="w-full min-w-[600px]">
-                        <thead>
-                          <tr className="border-b">
-                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground">Περιοχή</th>
-                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground">Άτομα</th>
-                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground">
-                              Κίνδυνος
-                            </th>
-                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground hidden sm:table-cell">
-                              Κύρια Αιτία
-                            </th>
-                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground hidden md:table-cell">
-                              Υποστήριξη
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {areaStatsFiltered.map((row) => (
-                            <tr
-                              key={row.area}
-                              className="border-b hover:bg-muted/50 transition-colors cursor-pointer"
-                              onClick={() => setSelectedArea(row.area)}
-                            >
-                              <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium">{row.area}</td>
-                              <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm">{row.count}</td>
-                              <td className="py-2 md:py-3 px-2 md:px-4">
-                                <Badge variant={getRiskBadgeVariant(row.risk)} className="text-xs">{row.risk}</Badge>
-                              </td>
-                              <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm hidden sm:table-cell">{row.topCause}</td>
-                              <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm text-muted-foreground hidden md:table-cell">{row.topSupport}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </CardContent>
-                </Card>
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
@@ -502,6 +433,94 @@ const Admin = () => {
                     </ResponsiveContainer>
                   </CardContent>
                 </Card>
+
+                {/* Λίστα Περιοχών σε Κίνδυνο (πάνω-πάνω) */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between flex-wrap gap-3">
+                      <div>
+                        <CardTitle className="text-base md:text-lg">Λίστα Περιοχών σε Κίνδυνο</CardTitle>
+                        <CardDescription className="text-xs md:text-sm">8 από 8 περιοχές</CardDescription>
+                      </div>
+                      <Button variant="default" size="sm" className="text-xs md:text-sm">
+                        <Download className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
+                        <span className="hidden sm:inline">Εξαγωγή</span>
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col sm:flex-row gap-2 md:gap-4 mb-4 md:mb-6">
+                      <div className="flex-1 relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 md:w-4 md:h-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Αναζήτηση με περιοχή..."
+                          className="pl-8 md:pl-10 text-sm"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                      </div>
+                      <Select value={filter} onValueChange={setFilter}>
+                        <SelectTrigger className="w-full sm:w-[180px] text-sm">
+                          <Filter className="w-3 h-3 md:w-4 md:h-4 mr-2" />
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Όλοι">Όλοι</SelectItem>
+                          <SelectItem value="Υψηλός">Υψηλός</SelectItem>
+                          <SelectItem value="Μέτριος">Μέτριος</SelectItem>
+                          <SelectItem value="Χαμηλός">Χαμηλός</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="overflow-x-auto -mx-4 md:mx-0">
+                      <table className="w-full min-w-[600px]">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground">
+                              Περιοχή
+                            </th>
+                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground">
+                              Άτομα
+                            </th>
+                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground">
+                              Κίνδυνος
+                            </th>
+                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground hidden sm:table-cell">
+                              Κύρια Αιτία
+                            </th>
+                            <th className="text-left py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium text-muted-foreground hidden md:table-cell">
+                              Υποστήριξη
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {areaStatsFiltered.map((row) => (
+                            <tr
+                              key={row.area}
+                              className="border-b hover:bg-muted/50 transition-colors cursor-pointer"
+                              onClick={() => setSelectedArea(row.area)}
+                            >
+                              <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm font-medium">{row.area}</td>
+                              <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm">{row.count}</td>
+                              <td className="py-2 md:py-3 px-2 md:px-4">
+                                <Badge variant={getRiskBadgeVariant(row.risk)} className="text-xs">
+                                  {row.risk}
+                                </Badge>
+                              </td>
+                              <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm hidden sm:table-cell">
+                                {row.topCause}
+                              </td>
+                              <td className="py-2 md:py-3 px-2 md:px-4 text-xs md:text-sm text-muted-foreground hidden md:table-cell">
+                                {row.topSupport}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
@@ -511,14 +530,24 @@ const Admin = () => {
             <DialogContent className="max-w-[95vw] md:max-w-3xl max-h-[50vh] md:max-h-[80vh] flex flex-col p-0">
               <DialogHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-2 md:pb-4 border-b sticky top-0 bg-background z-10">
                 <div className="flex items-center gap-2 md:gap-3">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     className="md:hidden h-8 w-8 shrink-0"
                     onClick={() => setSelectedArea(null)}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m15 18-6-6 6-6"/>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m15 18-6-6 6-6" />
                     </svg>
                   </Button>
                   <div className="flex-1 min-w-0">
@@ -539,15 +568,29 @@ const Admin = () => {
                       <Card
                         key={citizen.id}
                         className="cursor-pointer transition-all hover:bg-accent md:border-l-4"
-                        style={{ borderLeftColor: citizen.risk === "Υψηλός" ? "hsl(0 84% 60%)" : citizen.risk === "Μέτριος" ? "hsl(38 92% 50%)" : "hsl(142 71% 45%)" }}
+                        style={{
+                          borderLeftColor:
+                            citizen.risk === "Υψηλός"
+                              ? "hsl(0 84% 60%)"
+                              : citizen.risk === "Μέτριος"
+                                ? "hsl(38 92% 50%)"
+                                : "hsl(142 71% 45%)",
+                        }}
                         onClick={() => setSelectedCitizen(citizen)}
                       >
                         <CardContent className="p-3 md:p-4">
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex-1 min-w-0 space-y-1">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="font-mono font-semibold text-xs md:text-sm truncate">{citizen.id}</span>
-                                <Badge variant={getRiskBadgeVariant(citizen.risk)} className="text-[9px] md:text-xs px-1.5 py-0.5 shrink-0">{citizen.risk}</Badge>
+                                <span className="font-mono font-semibold text-xs md:text-sm truncate">
+                                  {citizen.id}
+                                </span>
+                                <Badge
+                                  variant={getRiskBadgeVariant(citizen.risk)}
+                                  className="text-[9px] md:text-xs px-1.5 py-0.5 shrink-0"
+                                >
+                                  {citizen.risk}
+                                </Badge>
                               </div>
                               <div className="text-[10px] md:text-sm text-muted-foreground">
                                 <span className="inline-block">Ηλικία: {citizen.age}</span>
@@ -555,34 +598,57 @@ const Admin = () => {
                                 <span className="inline-block">{citizen.cause}</span>
                               </div>
                             </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-muted-foreground">
-                              <path d="m9 18 6-6-6-6"/>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="shrink-0 text-muted-foreground"
+                            >
+                              <path d="m9 18 6-6-6-6" />
                             </svg>
                           </div>
                         </CardContent>
                       </Card>
                     ));
-                  })()
-                }
+                  })()}
               </div>
-              
+
               <div className="px-3 md:px-6 py-2.5 md:py-4 border-t bg-muted/30 md:hidden">
-                {selectedArea && (() => {
-                  const total = Math.max(1, Math.ceil(getAreaCitizens(selectedArea).length / ITEMS_PER_PAGE_MOBILE));
-                  return (
-                    <div className="flex items-center justify-between gap-3">
-                      <Button variant="secondary" size="sm" onClick={() => setAreaPage((p) => Math.max(1, p - 1))} disabled={areaPage <= 1} className="text-xs">
-                        Πίσω
-                      </Button>
-                      <p className="text-[10px] text-muted-foreground whitespace-nowrap">
-                        Σελίδα {areaPage} από {total}
-                      </p>
-                      <Button variant="default" size="sm" onClick={() => setAreaPage((p) => Math.min(total, p + 1))} disabled={areaPage >= total} className="text-xs">
-                        Επόμενη
-                      </Button>
-                    </div>
-                  );
-                })()}
+                {selectedArea &&
+                  (() => {
+                    const total = Math.max(1, Math.ceil(getAreaCitizens(selectedArea).length / ITEMS_PER_PAGE_MOBILE));
+                    return (
+                      <div className="flex items-center justify-between gap-3">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setAreaPage((p) => Math.max(1, p - 1))}
+                          disabled={areaPage <= 1}
+                          className="text-xs"
+                        >
+                          Πίσω
+                        </Button>
+                        <p className="text-[10px] text-muted-foreground whitespace-nowrap">
+                          Σελίδα {areaPage} από {total}
+                        </p>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() => setAreaPage((p) => Math.min(total, p + 1))}
+                          disabled={areaPage >= total}
+                          className="text-xs"
+                        >
+                          Επόμενη
+                        </Button>
+                      </div>
+                    );
+                  })()}
               </div>
             </DialogContent>
           </Dialog>
@@ -592,14 +658,24 @@ const Admin = () => {
             <DialogContent className="max-w-[95vw] md:max-w-lg h-auto max-h-[90vh] flex flex-col p-0">
               <DialogHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-2 md:pb-4 border-b sticky top-0 bg-background z-10">
                 <div className="flex items-center gap-2 md:gap-3">
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     className="md:hidden h-8 w-8 shrink-0"
                     onClick={() => setSelectedCitizen(null)}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="m15 18-6-6 6-6"/>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="m15 18-6-6 6-6" />
                     </svg>
                   </Button>
                   <div className="flex-1 min-w-0">
@@ -615,7 +691,10 @@ const Admin = () => {
                 <div className="p-3 md:p-4 bg-muted rounded-lg space-y-1.5 md:space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-xs md:text-sm text-muted-foreground">Κίνδυνος:</span>
-                    <Badge variant={selectedCitizen ? getRiskBadgeVariant(selectedCitizen.risk) : "default"} className="text-xs">
+                    <Badge
+                      variant={selectedCitizen ? getRiskBadgeVariant(selectedCitizen.risk) : "default"}
+                      className="text-xs"
+                    >
                       {selectedCitizen?.risk}
                     </Badge>
                   </div>
@@ -630,37 +709,63 @@ const Admin = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="assistance" className="text-xs md:text-sm">Τύπος Βοήθειας</Label>
+                  <Label htmlFor="assistance" className="text-xs md:text-sm">
+                    Τύπος Βοήθειας
+                  </Label>
                   <Select value={assistanceType} onValueChange={setAssistanceType}>
                     <SelectTrigger id="assistance" className="text-xs md:text-sm h-9 md:h-10">
                       <SelectValue placeholder="Επιλέξτε τύπο βοήθειας" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Οικονομική Βοήθεια" className="text-xs md:text-sm">Οικονομική Βοήθεια</SelectItem>
-                      <SelectItem value="Επίδομα Στέγασης" className="text-xs md:text-sm">Επίδομα Στέγασης</SelectItem>
-                      <SelectItem value="Επίδομα Ανεργίας" className="text-xs md:text-sm">Επίδομα Ανεργίας</SelectItem>
-                      <SelectItem value="Κοινωνικό Παντοπωλείο" className="text-xs md:text-sm">Κοινωνικό Παντοπωλείο</SelectItem>
-                      <SelectItem value="Ιατρική Φροντίδα" className="text-xs md:text-sm">Ιατρική Φροντίδα</SelectItem>
-                      <SelectItem value="Συμβουλευτική" className="text-xs md:text-sm">Συμβουλευτική</SelectItem>
+                      <SelectItem value="Οικονομική Βοήθεια" className="text-xs md:text-sm">
+                        Οικονομική Βοήθεια
+                      </SelectItem>
+                      <SelectItem value="Επίδομα Στέγασης" className="text-xs md:text-sm">
+                        Επίδομα Στέγασης
+                      </SelectItem>
+                      <SelectItem value="Επίδομα Ανεργίας" className="text-xs md:text-sm">
+                        Επίδομα Ανεργίας
+                      </SelectItem>
+                      <SelectItem value="Κοινωνικό Παντοπωλείο" className="text-xs md:text-sm">
+                        Κοινωνικό Παντοπωλείο
+                      </SelectItem>
+                      <SelectItem value="Ιατρική Φροντίδα" className="text-xs md:text-sm">
+                        Ιατρική Φροντίδα
+                      </SelectItem>
+                      <SelectItem value="Συμβουλευτική" className="text-xs md:text-sm">
+                        Συμβουλευτική
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <Label htmlFor="method" className="text-xs md:text-sm">Μέθοδος Αποστολής</Label>
+                  <Label htmlFor="method" className="text-xs md:text-sm">
+                    Μέθοδος Αποστολής
+                  </Label>
                   <Select value={sendMethod} onValueChange={setSendMethod}>
                     <SelectTrigger id="method" className="text-xs md:text-sm h-9 md:h-10">
                       <SelectValue placeholder="Επιλέξτε μέθοδο" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="sms" className="text-xs md:text-sm">SMS</SelectItem>
-                      <SelectItem value="push" className="text-xs md:text-sm">Push Notification</SelectItem>
-                      <SelectItem value="letter" className="text-xs md:text-sm">Γράμμα (Κρυπτογραφημένο)</SelectItem>
+                      <SelectItem value="sms" className="text-xs md:text-sm">
+                        SMS
+                      </SelectItem>
+                      <SelectItem value="push" className="text-xs md:text-sm">
+                        Push Notification
+                      </SelectItem>
+                      <SelectItem value="letter" className="text-xs md:text-sm">
+                        Γράμμα (Κρυπτογραφημένο)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <Button className="w-full text-xs md:text-sm h-9 md:h-10" onClick={handleSendAssistance} disabled={!assistanceType || !sendMethod}>
+                <Button
+                  className="w-full text-xs md:text-sm h-9 md:h-10"
+                  onClick={handleSendAssistance}
+                  disabled={!assistanceType || !sendMethod}
+                >
                   <Send className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2" />
                   Αποστολή Ειδοποίησης
                 </Button>
@@ -669,7 +774,6 @@ const Admin = () => {
                   Η διεύθυνση είναι κρυπτογραφημένη
                 </p>
               </div>
-              
             </DialogContent>
           </Dialog>
         </div>
