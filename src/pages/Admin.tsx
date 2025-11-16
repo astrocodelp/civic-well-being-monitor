@@ -202,16 +202,16 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 md:flex md:items-center md:justify-center p-2 md:p-8">
+    <div className="h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 md:flex md:items-center md:justify-center p-2 md:p-8">
       {/* Desktop Monitor Frame - Hidden on mobile */}
-      <div className="relative w-full max-w-[1600px]">
+      <div className="relative w-full max-w-[1600px] h-full md:h-auto">
         {/* Monitor Screen */}
-        <div className="relative bg-slate-950 md:rounded-2xl md:border-[12px] md:border-slate-900 overflow-hidden md:shadow-2xl">
+        <div className="relative bg-slate-950 md:rounded-2xl md:border-[12px] md:border-slate-900 overflow-hidden md:shadow-2xl h-full md:h-auto">
           {/* Thin camera notch - Desktop only */}
           <div className="hidden md:block absolute top-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-slate-800 rounded-b-md z-50" />
 
           {/* Screen Content with aspect ratio */}
-          <div className="bg-background overflow-y-auto min-h-screen md:min-h-0" style={{ height: "auto", maxHeight: "100vh" }}>
+          <div className="bg-background overflow-y-auto h-full md:max-h-[85vh]">
             <div className="p-3 md:p-6 lg:p-8">
               <div className="max-w-[1400px] mx-auto space-y-8">
                 {/* Header */}
