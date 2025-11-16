@@ -499,7 +499,7 @@ const Admin = () => {
 
           {/* Area Citizens Dialog */}
           <Dialog open={!!selectedArea} onOpenChange={() => setSelectedArea(null)}>
-            <DialogContent className="max-w-[95vw] md:max-w-3xl h-[90vh] md:h-auto md:max-h-[80vh] flex flex-col p-0">
+            <DialogContent className="max-w-[95vw] md:max-w-3xl max-h-[50vh] md:max-h-[80vh] flex flex-col p-0">
               <DialogHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-2 md:pb-4 border-b sticky top-0 bg-background z-10">
                 <div className="flex items-center gap-2 md:gap-3">
                   <Button 
